@@ -1,0 +1,14 @@
+package sessions
+
+import (
+	"net/http"
+
+	"github.com/gorilla/sessions"
+)
+
+var store = sessions.NewCookieStore([]byte("super_secret"))
+
+func GetSession(r *http.Request) *sessions.Session {
+	session, _ := store.Get(r, "session-name")
+	return session
+}

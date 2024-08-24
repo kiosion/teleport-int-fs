@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  #root {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@layer components {
+  .focus-ring {
+    @apply focus-visible:ring-2 focus:outline-none ring-lime-300 ring-offset-2 ring-offset-zinc-800;
+  }
+}
+
+@layer utilities {
+  .max-w-0 {
+    max-width: 0;
+  }
+  .max-w-full {
+    max-width: 100%;
+  }
+  .transition-max-width {
+    transition-property: max-width;
+    transition-duration: 500ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}
