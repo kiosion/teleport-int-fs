@@ -1,0 +1,27 @@
+package routes
+
+import (
+	"net/http"
+	"strings"
+
+	"github.com/goteleport-interview/fs4/api/auth"
+	"github.com/goteleport-interview/fs4/api/utils"
+)
+
+func ValidateTokenHandler(w http.ResponseWriter, r *http.Request) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.RespondWithError(w, "Authorization is required", http.StatusUnauthorized)
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+	_, err := auth.ValidateToken(tokenString)
+	if err != nil {
+		utils.RespondWithError(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	utils.RespondWithJSON(w, nil, http.StatusOK)
+}

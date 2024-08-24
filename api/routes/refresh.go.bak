@@ -1,0 +1,32 @@
+package routes
+
+import (
+	"net/http"
+	"strings"
+
+	"github.com/goteleport-interview/fs4/api/auth"
+	"github.com/goteleport-interview/fs4/api/utils"
+)
+
+func RefreshTokenHandler(w http.ResponseWriter, r *http.Request) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.RespondWithError(w, "Authorization is required", http.StatusUnauthorized)
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+	claims, err := auth.ValidateToken(tokenString)
+	if err != nil {
+		utils.RespondWithError(w, err.Error(), http.StatusForbidden)
+		return
+	}
+
+	newToken, err := auth.GenerateToken(claims.Username)
+	if err != nil {
+		utils.RespondWithError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	utils.RespondWithJSON(w, map[string]string{"token": newToken}, http.StatusOK)
+}
